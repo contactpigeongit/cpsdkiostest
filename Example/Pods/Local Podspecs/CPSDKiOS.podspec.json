@@ -1,0 +1,38 @@
+{
+  "name": "CPSDKiOS",
+  "version": "0.1.0",
+  "summary": "A short description of CPSDKiOS.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/tomatoset/CPSDKiOS",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "tomatoset": "dasd"
+  },
+  "source": {
+    "git": "https://github.com/tomatoset/CPSDKiOS.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "12.0"
+  },
+  "source_files": "CPSDKiOS/Classes/**/*",
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "FirebaseCore",
+    "FirebaseInstanceID",
+    "FirebaseMessaging"
+  ],
+  "dependencies": {
+    "Firebase/Core": [
+      "~> 7.5"
+    ],
+    "Firebase/Messaging": [
+      "~> 7.5"
+    ]
+  },
+  "static_framework": true
+}
