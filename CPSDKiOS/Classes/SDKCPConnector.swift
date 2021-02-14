@@ -142,8 +142,9 @@ public struct ScreenSize {
 }
 
 public class cpConnectionService{
-    
-    public init(){
+    let sharedApp: UIApplication?
+    public init(_ application: UIApplication){
+        self.sharedApp = application
     }
     
     public func initWithOptions(appscptoken:String, appscpgroup:String, appscpname:String, doPostCartScreenshot: String, isFIRAlreadyInc: String){
@@ -484,7 +485,7 @@ public class cpConnectionService{
                 }
             }
         } else {
-            let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
+            let isNotificationEnabled = self.sharedApp!.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
             if isNotificationEnabled == true{
                 self.printMsg(message: "enabled notification setting")
                 isEnable?(true)
@@ -499,7 +500,7 @@ public class cpConnectionService{
     public func didRecieveNotificationExtensionRequest(userInfo: [AnyHashable: Any]) -> Any {
 
         var pstate = ""
-        switch UIApplication.shared.applicationState{
+        switch self.sharedApp!.applicationState{
         case .background :
             pstate = "background"
             break
@@ -536,7 +537,7 @@ public class cpConnectionService{
                         if pstate == "active" {
                             let alert = UIAlertController(title: title, message: message as String, preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title: "OK", style: .default, handler:nil))
-                            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+                            self.sharedApp!.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
                         } else {
                             func userNotificationCenter(_ center : UNUserNotificationCenter,
                                                         willPresent notification: UNNotification//,
