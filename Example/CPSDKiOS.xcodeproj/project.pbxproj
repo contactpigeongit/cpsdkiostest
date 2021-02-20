@@ -532,6 +532,7 @@
 					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
 				);
 				INFOPLIST_FILE = CPSDKiOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				ONLY_ACTIVE_ARCH = YES;
@@ -567,6 +568,7 @@
 					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
 				);
 				INFOPLIST_FILE = CPSDKiOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				ONLY_ACTIVE_ARCH = NO;
