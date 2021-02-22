@@ -473,12 +473,6 @@ public class cpConnectionService{
                 case .notDetermined:
                     self.printMsg(message: "something vital went wrong here")
                     isEnable?(false)
-                case .provisional:
-                    self.printMsg(message: "something vital went wrong here")
-                    isEnable?(false)
-                case .ephemeral:
-                    self.printMsg(message: "something vital went wrong here")
-                    isEnable?(false)
                 @unknown default:
                     self.printMsg(message: "something vital went wrong here")
                     isEnable?(false)
