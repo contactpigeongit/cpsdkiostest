@@ -473,7 +473,7 @@ public class cpConnectionService{
                 case .notDetermined:
                     self.printMsg(message: "something vital went wrong here")
                     isEnable?(false)
-                @unknown default:
+                default:
                     self.printMsg(message: "something vital went wrong here")
                     isEnable?(false)
                 }
