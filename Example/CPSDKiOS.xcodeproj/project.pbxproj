@@ -219,10 +219,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 3PVD4S7WRV;
 						LastSwiftMigration = 1240;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 3PVD4S7WRV;
 						LastSwiftMigration = 1240;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -512,6 +514,7 @@
 			baseConfigurationReference = 72A392FA8DFDF080FD77AF99 /* Pods-CPSDKiOS_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 3PVD4S7WRV;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/CPSDKiOS/CPSDKiOS.framework/Headers\"",
@@ -548,6 +551,7 @@
 			baseConfigurationReference = C714651002F1BB00C32F72F1 /* Pods-CPSDKiOS_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 3PVD4S7WRV;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/CPSDKiOS/CPSDKiOS.framework/Headers\"",
@@ -583,6 +587,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A2EB8236B3B055E83DFE8392 /* Pods-CPSDKiOS_Tests.debug.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				DEVELOPMENT_TEAM = 3PVD4S7WRV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -605,6 +611,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 01BAD6E1294533EED441F351 /* Pods-CPSDKiOS_Tests.release.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				DEVELOPMENT_TEAM = 3PVD4S7WRV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",

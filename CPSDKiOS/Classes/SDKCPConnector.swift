@@ -82,7 +82,7 @@ public extension UIDevice {
 
 public class cpMainParameters: NSObject {
     public static let shared: cpMainParameters = cpMainParameters()
-    public var cpSubmitDataEndpoint = "https://plato.contactpigeon.com/bi/atlantis/various/0587d93972144bd394f77eca8e2cecdd/"
+    public var cpSubmitDataEndpoint = "https://plato.contactpigeon.com/bi/atlantis/various/0587d93972144bd394f77eca8e2cecdd_cordova/"
     public var cptoken = ""
     public var cuem = ""
     public var oldcuem = ""
@@ -143,8 +143,13 @@ public struct ScreenSize {
 
 public class cpConnectionService{
     let sharedApp: UIApplication?
+    
     public init(_ application: UIApplication){
         self.sharedApp = application
+    }
+    
+    public init(){
+        self.sharedApp = nil
     }
     
     public func initWithOptions(appscptoken:String, appscpgroup:String, appscpname:String, doPostCartScreenshot: String, isFIRAlreadyInc: String){
@@ -462,7 +467,6 @@ public class cpConnectionService{
 
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings(){ (setttings) in
-
                 switch setttings.authorizationStatus{
                 case .authorized:
                     self.printMsg(message: "enabled notification setting")
@@ -492,20 +496,23 @@ public class cpConnectionService{
     
     @available(iOS 10.0, *)
     public func didRecieveNotificationExtensionRequest(userInfo: [AnyHashable: Any]) -> Any {
-
         var pstate = ""
-        switch self.sharedApp!.applicationState{
-        case .background :
+        if self.sharedApp == nil {
             pstate = "background"
-            break
-        case .inactive :
-            pstate = "inactive"
-            break
-        case .active :
-            pstate = "active"
-            break
-        @unknown default:
-            pstate = "unknown"
+        } else {
+            switch self.sharedApp!.applicationState{
+            case .background :
+                pstate = "background"
+                break
+            case .inactive :
+                pstate = "inactive"
+                break
+            case .active :
+                pstate = "active"
+                break
+            @unknown default:
+                pstate = "unknown"
+            }
         }
         printMsg(message: "didRecieveNotificationExtensionRequest pstate:\(pstate)")
 
