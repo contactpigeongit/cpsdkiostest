@@ -12,15 +12,15 @@ import FirebaseInstanceID
 import FirebaseMessaging
 
 public class FirebaseOperator {
-    var gregorConnector: cpConnectionService!
+    var cpConnector: CPConnectionService!
     
-    public init(gregorysConnector: cpConnectionService) {
-        gregorConnector = gregorysConnector
+    public init(cpConnector: CPConnectionService) {
+        self.cpConnector = cpConnector
     }
     
     public func askforregistration(_ application: UIApplication) {
-        self.gregorConnector.printMsg(message:"fbapp:\(String(describing: FirebaseApp.app())), isfirinc: \(cpMainParameters.shared.isFIRAlreadyInc)")
-        if(FirebaseApp.app() == nil && cpMainParameters.shared.isFIRAlreadyInc != "yes"){
+        self.cpConnector.printMsg(message:"fbapp:\(String(describing: FirebaseApp.app())), isfirinc: \(CPMainParameters.shared.isFIRAlreadyInc)")
+        if(FirebaseApp.app() == nil && CPMainParameters.shared.isFIRAlreadyInc != "yes"){
             FirebaseApp.configure()
         }
 
@@ -34,31 +34,31 @@ public class FirebaseOperator {
             center.requestAuthorization(options: authOptions) {
                 (granted, error) in
                 if !granted {
-                    cpMainParameters.shared.notsAllowed = "no"
-                    UserDefaults.standard.set(cpMainParameters.shared.notsAllowed,forKey: "notsAllowed")
+                    CPMainParameters.shared.notsAllowed = "no"
+                    UserDefaults.standard.set(CPMainParameters.shared.notsAllowed,forKey: "notsAllowed")
                     UserDefaults.standard.synchronize()
-                    self.gregorConnector.postDeniedFCMToCP()
+                    self.cpConnector.postDeniedFCMToCP()
                 } else {
-                    cpMainParameters.shared.notsAllowed = "yes"
-                    UserDefaults.standard.set(cpMainParameters.shared.notsAllowed,forKey: "notsAllowed")
+                    CPMainParameters.shared.notsAllowed = "yes"
+                    UserDefaults.standard.set(CPMainParameters.shared.notsAllowed,forKey: "notsAllowed")
                     UserDefaults.standard.synchronize()
                     _ = self.getRegistrationToken()
                 }
-                self.gregorConnector.printMsg(message: "askforregistration notsAllowed:\(cpMainParameters.shared.notsAllowed)")
+                self.cpConnector.printMsg(message: "askforregistration notsAllowed:\(CPMainParameters.shared.notsAllowed)")
 
             }
             center.getNotificationSettings { (settings) in
                 if settings.authorizationStatus != .authorized {
-                    cpMainParameters.shared.notsAllowed = "no"
-                    UserDefaults.standard.set(cpMainParameters.shared.notsAllowed,forKey: "notsAllowed")
+                    CPMainParameters.shared.notsAllowed = "no"
+                    UserDefaults.standard.set(CPMainParameters.shared.notsAllowed,forKey: "notsAllowed")
                     UserDefaults.standard.synchronize()
                     //self.postDeniedFCMToCP()
                 } else {
-                    cpMainParameters.shared.notsAllowed = "yes"
+                    CPMainParameters.shared.notsAllowed = "yes"
                     UserDefaults.standard.set("yes",forKey: "notsAllowed")
                     UserDefaults.standard.synchronize()
                 }
-                self.gregorConnector.printMsg(message: "askforregistration notsAllowed:\(cpMainParameters.shared.notsAllowed)")
+                self.cpConnector.printMsg(message: "askforregistration notsAllowed:\(CPMainParameters.shared.notsAllowed)")
             }
         } else {
             let settings: UIUserNotificationSettings =
@@ -74,14 +74,14 @@ public class FirebaseOperator {
         _ = NotificationCenter.default.addObserver(forName: NSNotification.Name.MessagingRegistrationTokenRefreshed, object: nil, queue: nil) {_ in
             Messaging.messaging().token {(result,error) in
                 if let error = error {
-                    self.gregorConnector.printMsg(message: "askforregistration error:Error!!!!! fetching remote instance Id: \(error)")
+                    self.cpConnector.printMsg(message: "askforregistration error:Error!!!!! fetching remote instance Id: \(error)")
                 } else if let result = result {
                     let fcmToken = result
-                    self.gregorConnector.printMsg(message: "askforregistration fcmToken:\(fcmToken)")
+                    self.cpConnector.printMsg(message: "askforregistration fcmToken:\(fcmToken)")
 
-                    self.gregorConnector.postFCMTokenToCP(fcmToken:fcmToken)
+                    self.cpConnector.postFCMTokenToCP(fcmToken:fcmToken)
                 } else {
-                    self.gregorConnector.printMsg(message: "askforregistration error:Error!!!!! Unknown getting fcmToken")
+                    self.cpConnector.printMsg(message: "askforregistration error:Error!!!!! Unknown getting fcmToken")
                 }
             }
         }
@@ -90,14 +90,14 @@ public class FirebaseOperator {
         var fcmToken = "";
         Messaging.messaging().token {(result,error) in
             if let error = error {
-                self.gregorConnector.printMsg(message: "getRegistrationToken error:Error!!!!! fetching remote instance Id: \(error)")
+                self.cpConnector.printMsg(message: "getRegistrationToken error:Error!!!!! fetching remote instance Id: \(error)")
             } else if let result = result {
                 fcmToken = result
-                self.gregorConnector.printMsg(message: "getRegistrationToken fcmToken:\(fcmToken)")
-                self.gregorConnector.postFCMTokenToCP(fcmToken: fcmToken)
-                cpMainParameters.shared.isPushActive = true
+                self.cpConnector.printMsg(message: "getRegistrationToken fcmToken:\(fcmToken)")
+                self.cpConnector.postFCMTokenToCP(fcmToken: fcmToken)
+                CPMainParameters.shared.isPushActive = true
             } else {
-                self.gregorConnector.printMsg(message: "getRegistrationToken error:Error!!!!! Unknown getting fcmToken")
+                self.cpConnector.printMsg(message: "getRegistrationToken error:Error!!!!! Unknown getting fcmToken")
             }
         }
         return fcmToken
@@ -105,15 +105,15 @@ public class FirebaseOperator {
     @objc func getRefreshedRegistrationToken(notification: NSNotification){
         Messaging.messaging().token {(result,error) in
             if let error = error {
-                self.gregorConnector.printMsg(message: "getRefreshedRegistrationToken error:Error!!!!! fetching remote instance Id: \(error)")
+                self.cpConnector.printMsg(message: "getRefreshedRegistrationToken error:Error!!!!! fetching remote instance Id: \(error)")
             } else if let result = result {
                 let fcmToken = result
                 
-                self.gregorConnector.printMsg(message: "getRefreshedRegistrationToken fcmToken:\(fcmToken)")
+                self.cpConnector.printMsg(message: "getRefreshedRegistrationToken fcmToken:\(fcmToken)")
 
-                self.gregorConnector.postFCMTokenToCP(fcmToken:fcmToken)
+                self.cpConnector.postFCMTokenToCP(fcmToken:fcmToken)
             } else {
-                self.gregorConnector.printMsg(message: "getRefreshedRegistrationToken error:Error!!!!! Unknown getting fcmToken")
+                self.cpConnector.printMsg(message: "getRefreshedRegistrationToken error:Error!!!!! Unknown getting fcmToken")
             }
         }
     }

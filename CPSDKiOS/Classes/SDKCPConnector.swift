@@ -80,8 +80,8 @@ public extension UIDevice {
     }
 }
 
-public class cpMainParameters: NSObject {
-    public static let shared: cpMainParameters = cpMainParameters()
+public class CPMainParameters: NSObject {
+    public static let shared: CPMainParameters = CPMainParameters()
     public var cpSubmitDataEndpoint = "https://plato.contactpigeon.com/bi/atlantis/various/0587d93972144bd394f77eca8e2cecdd_cordova/"
     public var cptoken = ""
     public var cuem = ""
@@ -105,27 +105,27 @@ public class cpMainParameters: NSObject {
     public var notsAllowed = "no"
     public var isCartSelfContained = "no"
     public var postCartScreenshot = "no"
-    public var handleInAppNots = "yes"
+    public var handleInAppNots = "no"
     public var debugMode = "on"
     public var isFIRAlreadyInc = "no"
-    public var curOrderData = cpOrderData()
-    public var curCartItems = [cpCartItem]()
+    public var curOrderData = CPOrderData()
+    public var curCartItems = [CPCartItem]()
 }
 
-public struct cpOrderData:Codable {
+public struct CPOrderData:Codable {
     public var utmtid = ""
     public var utmtto = 0.0
-    public var items = [cpOrderItem]()
+    public var items = [CPOrderItem]()
 }
 
-public struct cpOrderItem: Codable {
+public struct CPOrderItem: Codable {
     public var sku = ""
     public var name = ""
     public var qty = 0
     public var unitPrice = 0.0
 }
 
-public struct cpCartItem: Codable {
+public struct CPCartItem: Codable {
     public var sku = ""
     public var name = ""
     public var qty = 0
@@ -141,7 +141,7 @@ public struct ScreenSize {
     static let screenMinLength = min(ScreenSize.screenWidth, ScreenSize.screenHeight)
 }
 
-public class cpConnectionService{
+public class CPConnectionService{
     let sharedApp: UIApplication?
     
     public init(_ application: UIApplication){
@@ -155,127 +155,127 @@ public class cpConnectionService{
     public func initWithOptions(appscptoken:String, appscpgroup:String, appscpname:String, doPostCartScreenshot: String, isFIRAlreadyInc: String){
         
         if (isFIRAlreadyInc != "" && isFIRAlreadyInc != "no"){
-            cpMainParameters.shared.isFIRAlreadyInc = "yes"
+            CPMainParameters.shared.isFIRAlreadyInc = "yes"
         }
         
         if (doPostCartScreenshot != "") {
-            cpMainParameters.shared.postCartScreenshot = doPostCartScreenshot
+            CPMainParameters.shared.postCartScreenshot = doPostCartScreenshot
             if (doPostCartScreenshot == "selfContained") {
-                cpMainParameters.shared.postCartScreenshot = "yes"
-                cpMainParameters.shared.isCartSelfContained = "yes"
+                CPMainParameters.shared.postCartScreenshot = "yes"
+                CPMainParameters.shared.isCartSelfContained = "yes"
             }
         }
-        printMsg(message: "postCartScreenshot:\(cpMainParameters.shared.postCartScreenshot) \n isCartSelfContained:\(cpMainParameters.shared.isCartSelfContained)")
+        printMsg(message: "postCartScreenshot:\(CPMainParameters.shared.postCartScreenshot) \n isCartSelfContained:\(CPMainParameters.shared.isCartSelfContained)")
         
-        cpMainParameters.shared.cptoken = appscptoken
+        CPMainParameters.shared.cptoken = appscptoken
         UserDefaults.standard.set(appscptoken, forKey: "cptoken")
-        printMsg(message: "cptoken:\(cpMainParameters.shared.cptoken)")
+        printMsg(message: "cptoken:\(CPMainParameters.shared.cptoken)")
 
         self.isPushEnabledAtOSLevel {  (isEnable) in
             // you know notification status.
-            cpMainParameters.shared.isPushActive = isEnable
-            self.printMsg(message: "isPushActive:\(cpMainParameters.shared.isPushActive)")
+            CPMainParameters.shared.isPushActive = isEnable
+            self.printMsg(message: "isPushActive:\(CPMainParameters.shared.isPushActive)")
         }
         
         if UserDefaults.standard.object(forKey: "notsAllowed") != nil {
-            cpMainParameters.shared.notsAllowed = UserDefaults.standard.string(forKey: "notsAllowed")!
+            CPMainParameters.shared.notsAllowed = UserDefaults.standard.string(forKey: "notsAllowed")!
         }
-        printMsg(message: "notsAllowed:\(cpMainParameters.shared.notsAllowed)")
+        printMsg(message: "notsAllowed:\(CPMainParameters.shared.notsAllowed)")
         
-        cpMainParameters.shared.systemVersion = "iOS " + UIDevice.current.systemVersion
-        printMsg(message: "systemVersion:\(cpMainParameters.shared.systemVersion)")
+        CPMainParameters.shared.systemVersion = "iOS " + UIDevice.current.systemVersion
+        printMsg(message: "systemVersion:\(CPMainParameters.shared.systemVersion)")
         
-        cpMainParameters.shared.model = UIDevice.current.modelName
-        cpMainParameters.shared.bundleID = Bundle.main.bundleIdentifier!
-        cpMainParameters.shared.identifierForVendor = UIDevice.current.identifierForVendor!.uuidString
-        printMsg(message: "model:\(cpMainParameters.shared.model) \n bundleID:\(cpMainParameters.shared.bundleID) \n identifierForVendor:\(cpMainParameters.shared.identifierForVendor)")
+        CPMainParameters.shared.model = UIDevice.current.modelName
+        CPMainParameters.shared.bundleID = Bundle.main.bundleIdentifier!
+        CPMainParameters.shared.identifierForVendor = UIDevice.current.identifierForVendor!.uuidString
+        printMsg(message: "model:\(CPMainParameters.shared.model) \n bundleID:\(CPMainParameters.shared.bundleID) \n identifierForVendor:\(CPMainParameters.shared.identifierForVendor)")
 
-        cpMainParameters.shared.ci = cpMainParameters.shared.identifierForVendor + "-" + appscpname
-        printMsg(message: "ci:\(cpMainParameters.shared.ci)")
-        printMsg(message: "utmsr:\(cpMainParameters.shared.utmsr)")
+        CPMainParameters.shared.ci = CPMainParameters.shared.identifierForVendor + "-" + appscpname
+        printMsg(message: "ci:\(CPMainParameters.shared.ci)")
+        printMsg(message: "utmsr:\(CPMainParameters.shared.utmsr)")
         
-        cpMainParameters.shared.langStr = Locale.current.languageCode!
-        cpMainParameters.shared.pre = Locale.preferredLanguages[0]
-        printMsg(message: "langStr:\(cpMainParameters.shared.langStr) \n pre:\(cpMainParameters.shared.pre)")
+        CPMainParameters.shared.langStr = Locale.current.languageCode!
+        CPMainParameters.shared.pre = Locale.preferredLanguages[0]
+        printMsg(message: "langStr:\(CPMainParameters.shared.langStr) \n pre:\(CPMainParameters.shared.pre)")
         
         if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-            cpMainParameters.shared.bundleVersion = text
+            CPMainParameters.shared.bundleVersion = text
         } else {
-            cpMainParameters.shared.bundleVersion = "1.0.0"
+            CPMainParameters.shared.bundleVersion = "1.0.0"
         }
-        UserDefaults.standard.set(cpMainParameters.shared.bundleVersion, forKey: "cp_ver")
-        cpMainParameters.shared.group = appscpgroup
-        printMsg(message: "group:\(cpMainParameters.shared.group)")
+        UserDefaults.standard.set(CPMainParameters.shared.bundleVersion, forKey: "cp_ver")
+        CPMainParameters.shared.group = appscpgroup
+        printMsg(message: "group:\(CPMainParameters.shared.group)")
         
         if UserDefaults.standard.object(forKey: "fcmtokenposted") != nil {
             let isFcmTokenPosted = UserDefaults.standard.string(forKey: "fcmtokenposted")
-            cpMainParameters.shared.curSessionFCMTokenPosted = isFcmTokenPosted!
+            CPMainParameters.shared.curSessionFCMTokenPosted = isFcmTokenPosted!
         }
-        printMsg(message: "curSessionFCMTokenPosted:\(cpMainParameters.shared.curSessionFCMTokenPosted)")
+        printMsg(message: "curSessionFCMTokenPosted:\(CPMainParameters.shared.curSessionFCMTokenPosted)")
         
         if UserDefaults.standard.object(forKey: "oldcuem") != nil {
-            cpMainParameters.shared.oldcuem = UserDefaults.standard.string(forKey: "oldcuem")!
-            if cpMainParameters.shared.cuem == "" {
-                cpMainParameters.shared.cuem = cpMainParameters.shared.oldcuem
+            CPMainParameters.shared.oldcuem = UserDefaults.standard.string(forKey: "oldcuem")!
+            if CPMainParameters.shared.cuem == "" {
+                CPMainParameters.shared.cuem = CPMainParameters.shared.oldcuem
             }
         }
-        printMsg(message: "cuem:\(cpMainParameters.shared.cuem)")
+        printMsg(message: "cuem:\(CPMainParameters.shared.cuem)")
 
-        cpMainParameters.shared.plistFileName = "GoogleService-Info.plist"
-        UserDefaults.standard.set(cpMainParameters.shared.cpSubmitDataEndpoint, forKey: "cpSubmitDataEndpoint")
+        CPMainParameters.shared.plistFileName = "GoogleService-Info.plist"
+        UserDefaults.standard.set(CPMainParameters.shared.cpSubmitDataEndpoint, forKey: "cpSubmitDataEndpoint")
         UserDefaults.standard.synchronize()
         printMsg(message: UserDefaults.standard.string(forKey: "cp_ver")!)
     }
     public func toggleDebugMode() {
-        if cpMainParameters.shared.debugMode == "on" {
+        if CPMainParameters.shared.debugMode == "on" {
             printMsg(message: "Deactivating debugMode")
-            cpMainParameters.shared.debugMode = "off"
+            CPMainParameters.shared.debugMode = "off"
         } else {
-            cpMainParameters.shared.debugMode = "on";
+            CPMainParameters.shared.debugMode = "on";
             printMsg(message: "debugMode Activated")
         }
-        printMsg(message: "debugMode:\(cpMainParameters.shared.debugMode)")
+        printMsg(message: "debugMode:\(CPMainParameters.shared.debugMode)")
     }
     public func printMsg(fileName: String = #file, functionName: String = #function, lineNumber: Int = #line, message: String) {
-        if (cpMainParameters.shared.debugMode == "on") {
+        if (CPMainParameters.shared.debugMode == "on") {
             print("\n----------------------------------------")
             print("line:#\(lineNumber) - ", message)
             print("\n----------------------------------------")
         }
     }
     public func resetcurSessionFCMTokenPosted(newValue:String) {
-        printMsg(message: "curSessionFCMTokenPosted:\(cpMainParameters.shared.curSessionFCMTokenPosted)")
-        cpMainParameters.shared.curSessionFCMTokenPosted = newValue;
-        printMsg(message: "curSessionFCMTokenPosted:\(cpMainParameters.shared.curSessionFCMTokenPosted)")
+        printMsg(message: "curSessionFCMTokenPosted:\(CPMainParameters.shared.curSessionFCMTokenPosted)")
+        CPMainParameters.shared.curSessionFCMTokenPosted = newValue;
+        printMsg(message: "curSessionFCMTokenPosted:\(CPMainParameters.shared.curSessionFCMTokenPosted)")
     }
     public func resetcurSessionCi(newValue:String) {
-        printMsg(message: "ci:\(cpMainParameters.shared.ci)")
-        cpMainParameters.shared.ci = newValue;
-        printMsg(message: "ci:\(cpMainParameters.shared.ci)")
+        printMsg(message: "ci:\(CPMainParameters.shared.ci)")
+        CPMainParameters.shared.ci = newValue;
+        printMsg(message: "ci:\(CPMainParameters.shared.ci)")
 
     }
     public func setContactMail(eMail:String, utmp:String) {
         var putmp = utmp
         if (putmp == "") {
-            putmp = "/"+cpMainParameters.shared.bundleID+"/ios/registerMail/"
+            putmp = "/"+CPMainParameters.shared.bundleID+"/ios/registerMail/"
         }
         printMsg(message: "putmp:\(putmp)")
 
         if (eMail != "") {
-            cpMainParameters.shared.cuem = eMail
-            printMsg(message: "cuem:\(cpMainParameters.shared.cuem)")
+            CPMainParameters.shared.cuem = eMail
+            printMsg(message: "cuem:\(CPMainParameters.shared.cuem)")
 
-            if (cpMainParameters.shared.cuem != cpMainParameters.shared.oldcuem) {
-                printMsg(message: "oldcuem:\(cpMainParameters.shared.oldcuem)")
-                cpMainParameters.shared.oldcuem = eMail
-                printMsg(message: "oldcuem:\(cpMainParameters.shared.oldcuem)")
+            if (CPMainParameters.shared.cuem != CPMainParameters.shared.oldcuem) {
+                printMsg(message: "oldcuem:\(CPMainParameters.shared.oldcuem)")
+                CPMainParameters.shared.oldcuem = eMail
+                printMsg(message: "oldcuem:\(CPMainParameters.shared.oldcuem)")
 
                 UserDefaults.standard.set(eMail,forKey: "oldcuem")
                 UserDefaults.standard.synchronize()
-                let parameters = "action=cp_registerEmail&cptoken=\(cpMainParameters.shared.cptoken)&cuem=\(cpMainParameters.shared.cuem)&ci=\(cpMainParameters.shared.ci)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&app_version=\(cpMainParameters.shared.bundleVersion)&utmsr=\(cpMainParameters.shared.utmsr)&reg_page=\(putmp)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&language_code=\(cpMainParameters.shared.langStr)"
+                let parameters = "action=cp_registerEmail&cptoken=\(CPMainParameters.shared.cptoken)&cuem=\(CPMainParameters.shared.cuem)&ci=\(CPMainParameters.shared.ci)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&app_version=\(CPMainParameters.shared.bundleVersion)&utmsr=\(CPMainParameters.shared.utmsr)&reg_page=\(putmp)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&language_code=\(CPMainParameters.shared.langStr)"
                 printMsg(message: "setContactMail parameters:\(parameters)")
                 
-                let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+                let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
                 printMsg(message: "setContactMail url:\(url)")
 
                 doPostRequest(url: url, parameters: parameters)
@@ -285,14 +285,14 @@ public class cpConnectionService{
     public func pageView(utmdt:String, utmp:String) {
         var putmp = utmp
         if (putmp == "") {
-            putmp = "/"+cpMainParameters.shared.bundleID+"/ios/"
+            putmp = "/"+CPMainParameters.shared.bundleID+"/ios/"
         }
         printMsg(message: "putmp:\(putmp)")
 
-        let parameters = "action=page&cptoken=\(cpMainParameters.shared.cptoken)&utmipc=&utmipn=&cf1=&cf2=&cf3=&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(utmdt)&cuem=\(cpMainParameters.shared.cuem)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&utmsr=\(cpMainParameters.shared.utmsr)&language_code=\(cpMainParameters.shared.langStr)&ci=\(cpMainParameters.shared.ci)"
+        let parameters = "action=page&cptoken=\(CPMainParameters.shared.cptoken)&utmipc=&utmipn=&cf1=&cf2=&cf3=&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(utmdt)&cuem=\(CPMainParameters.shared.cuem)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&utmsr=\(CPMainParameters.shared.utmsr)&language_code=\(CPMainParameters.shared.langStr)&ci=\(CPMainParameters.shared.ci)"
         printMsg(message: "pageView parameters:\(parameters)")
 
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)! //change the url
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)! //change the url
         printMsg(message: "pageView url:\(url)")
 
         doPostRequest(url: url, parameters: parameters)
@@ -300,14 +300,14 @@ public class cpConnectionService{
     public func productView(pName:String, pSku:String, utmp:String) {
         var putmp = utmp
         if (putmp == "") {
-            putmp = "/"+cpMainParameters.shared.bundleID+"/ios/"+pName
+            putmp = "/"+CPMainParameters.shared.bundleID+"/ios/"+pName
         }
         printMsg(message: "putmp:\(putmp)")
 
-        let parameters = "action=page&cptoken=\(cpMainParameters.shared.cptoken)&utmipc=\(pSku)&utmipn=\(pName)&cf1=&cf2=&cf3=&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(pName)&cuem=\(cpMainParameters.shared.cuem)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&utmsr=\(cpMainParameters.shared.utmsr)&language_code=\(cpMainParameters.shared.langStr)&ci=\(cpMainParameters.shared.ci)"
+        let parameters = "action=page&cptoken=\(CPMainParameters.shared.cptoken)&utmipc=\(pSku)&utmipn=\(pName)&cf1=&cf2=&cf3=&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(pName)&cuem=\(CPMainParameters.shared.cuem)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&utmsr=\(CPMainParameters.shared.utmsr)&language_code=\(CPMainParameters.shared.langStr)&ci=\(CPMainParameters.shared.ci)"
         printMsg(message: "productView parameters:\(parameters)")
 
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         printMsg(message: "productView url:\(url)")
 
         doPostRequest(url: url, parameters: parameters)
@@ -315,80 +315,80 @@ public class cpConnectionService{
     public func add2cart(pName:String, pSku:String, pQty:Int, pUnitPrice:Double, pImgURL:String, utmp:String) {
         var putmp = utmp
         if (putmp == "") {
-            putmp = "/"+cpMainParameters.shared.bundleID+"/ios/"+pName
+            putmp = "/"+CPMainParameters.shared.bundleID+"/ios/"+pName
         }
         printMsg(message: "putmp:\(putmp)")
 
-        let parameters = "action=event&cptoken=\(cpMainParameters.shared.cptoken)&utmipc=\(pSku)&utmipn=\(pName)&cf1=add2cart&cf2=\(pQty)&cf3=\(pUnitPrice)&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(pName)&cuem=\(cpMainParameters.shared.cuem)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&utmsr=\(cpMainParameters.shared.utmsr)&language_code=\(cpMainParameters.shared.langStr)&ci=\(cpMainParameters.shared.ci)"
+        let parameters = "action=event&cptoken=\(CPMainParameters.shared.cptoken)&utmipc=\(pSku)&utmipn=\(pName)&cf1=add2cart&cf2=\(pQty)&cf3=\(pUnitPrice)&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(pName)&cuem=\(CPMainParameters.shared.cuem)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&utmsr=\(CPMainParameters.shared.utmsr)&language_code=\(CPMainParameters.shared.langStr)&ci=\(CPMainParameters.shared.ci)"
         printMsg(message: "add2cart parameters:\(parameters)")
 
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         doPostRequest(url: url, parameters: parameters)
         printMsg(message: "add2cart url:\(url)")
 
-        let curCartItem = cpCartItem(sku: pSku, name: pName, qty: pQty, unitPrice: pUnitPrice, link: putmp, image: pImgURL)
-        if cpMainParameters.shared.postCartScreenshot != "no" {
+        let curCartItem = CPCartItem(sku: pSku, name: pName, qty: pQty, unitPrice: pUnitPrice, link: putmp, image: pImgURL)
+        if CPMainParameters.shared.postCartScreenshot != "no" {
             alterCart(curCartItem: curCartItem, cartAction: "add")
         }
     }
     public func removefromcart(pName:String, pSku:String, pQty:Int, pUnitPrice:Double, pImgURL:String, utmp:String) {
         var putmp = utmp
         if (putmp == "") {
-            putmp = "/"+cpMainParameters.shared.bundleID+"/ios/"+pName
+            putmp = "/"+CPMainParameters.shared.bundleID+"/ios/"+pName
         }
         printMsg(message: "putmp:\(putmp)")
 
-        let parameters = "action=event&cptoken=\(cpMainParameters.shared.cptoken)&utmipc=\(pSku)&utmipn=\(pName)&cf1=removefromcart&cf2=\(pQty)&cf3=\(pUnitPrice)&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(pName)&cuem=\(cpMainParameters.shared.cuem)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&utmsr=\(cpMainParameters.shared.utmsr)&language_code=\(cpMainParameters.shared.langStr)&ci=\(cpMainParameters.shared.ci)"
+        let parameters = "action=event&cptoken=\(CPMainParameters.shared.cptoken)&utmipc=\(pSku)&utmipn=\(pName)&cf1=removefromcart&cf2=\(pQty)&cf3=\(pUnitPrice)&utmtid=&utmtto=&utmp=\(putmp)&utmdt=\(pName)&cuem=\(CPMainParameters.shared.cuem)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&utmsr=\(CPMainParameters.shared.utmsr)&language_code=\(CPMainParameters.shared.langStr)&ci=\(CPMainParameters.shared.ci)"
         printMsg(message: "removefromcart parameters:\(parameters)")
 
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         printMsg(message: "removefromcart url:\(url)")
 
         doPostRequest(url: url, parameters: parameters)
-        let curCartItem = cpCartItem(sku: pSku, name: pName, qty: pQty, unitPrice: pUnitPrice, link: putmp, image: pImgURL)
+        let curCartItem = CPCartItem(sku: pSku, name: pName, qty: pQty, unitPrice: pUnitPrice, link: putmp, image: pImgURL)
         alterCart(curCartItem: curCartItem, cartAction: "remove")
     }
     public func setOrderData(oId:String, oValue:Double) {
-        cpMainParameters.shared.curOrderData.utmtid = oId
-        printMsg(message: "utmtid:\(cpMainParameters.shared.curOrderData.utmtid)")
+        CPMainParameters.shared.curOrderData.utmtid = oId
+        printMsg(message: "utmtid:\(CPMainParameters.shared.curOrderData.utmtid)")
 
-        cpMainParameters.shared.curOrderData.utmtto = ceil(oValue*100)/100
-        printMsg(message: "utmtto:\(cpMainParameters.shared.curOrderData.utmtto)")
+        CPMainParameters.shared.curOrderData.utmtto = ceil(oValue*100)/100
+        printMsg(message: "utmtto:\(CPMainParameters.shared.curOrderData.utmtto)")
 
-        cpMainParameters.shared.curOrderData.items.removeAll()
+        CPMainParameters.shared.curOrderData.items.removeAll()
     }
     public func addOrderItem(sku:String, name:String, quant: Int, price:Double) {
-        var newOrderItem = cpOrderItem()
+        var newOrderItem = CPOrderItem()
         newOrderItem.sku = sku
         newOrderItem.name = name
         newOrderItem.qty = quant
         newOrderItem.unitPrice = ceil(price*100)/100
         
-        printMsg(message: "orderItems Count:\(cpMainParameters.shared.curOrderData.items.count)")
-        cpMainParameters.shared.curOrderData.items.append(newOrderItem)
-        printMsg(message: "orderItems Count:\(cpMainParameters.shared.curOrderData.items.count)")
+        printMsg(message: "orderItems Count:\(CPMainParameters.shared.curOrderData.items.count)")
+        CPMainParameters.shared.curOrderData.items.append(newOrderItem)
+        printMsg(message: "orderItems Count:\(CPMainParameters.shared.curOrderData.items.count)")
     }
     public func postOrder(utmp:String) {
         var putmp = utmp
         if (putmp == "") {
-            putmp = "/"+cpMainParameters.shared.bundleID+"/ios/ordercomplete/"+cpMainParameters.shared.curOrderData.utmtid
+            putmp = "/"+CPMainParameters.shared.bundleID+"/ios/ordercomplete/"+CPMainParameters.shared.curOrderData.utmtid
         }
         printMsg(message: "putmp:\(putmp)")
 
         let jsonEncoder = JSONEncoder()
-        let jsonData = try! jsonEncoder.encode(cpMainParameters.shared.curOrderData.items)
+        let jsonData = try! jsonEncoder.encode(CPMainParameters.shared.curOrderData.items)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
-        let parameters = "action=event&cptoken=\(cpMainParameters.shared.cptoken)&utmipc=&utmipn=&cf1=order&cf2=&cf3=&cart=\(json ?? "")&utmtid=\(cpMainParameters.shared.curOrderData.utmtid)&utmtto=\(cpMainParameters.shared.curOrderData.utmtto)&utmp=\(putmp)&utmdt=\(cpMainParameters.shared.curOrderData.utmtid)&cuem=\(cpMainParameters.shared.cuem)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&utmsr=\(cpMainParameters.shared.utmsr)&language_code=\(cpMainParameters.shared.langStr)&ci=\(cpMainParameters.shared.ci)"
+        let parameters = "action=event&cptoken=\(CPMainParameters.shared.cptoken)&utmipc=&utmipn=&cf1=order&cf2=&cf3=&cart=\(json ?? "")&utmtid=\(CPMainParameters.shared.curOrderData.utmtid)&utmtto=\(CPMainParameters.shared.curOrderData.utmtto)&utmp=\(putmp)&utmdt=\(CPMainParameters.shared.curOrderData.utmtid)&cuem=\(CPMainParameters.shared.cuem)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&utmsr=\(CPMainParameters.shared.utmsr)&language_code=\(CPMainParameters.shared.langStr)&ci=\(CPMainParameters.shared.ci)"
         printMsg(message: "postOrder parameters:\(parameters)")
 
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         printMsg(message: "postOrder url:\(url)")
 
         doPostRequest(url: url, parameters: parameters)
         emptyCart()
     }
-    public func alterCart(curCartItem: cpCartItem, cartAction: String){
-        var curCartScreenshot = cpMainParameters.shared.curCartItems
+    public func alterCart(curCartItem: CPCartItem, cartAction: String){
+        var curCartScreenshot = CPMainParameters.shared.curCartItems
         var cartItemIndex = -1
         var cartItemsCounter = -1
         for cartItem in curCartScreenshot {
@@ -420,42 +420,42 @@ public class cpConnectionService{
                 curCartScreenshot.append(curCartItem)
             }
         }
-        cpMainParameters.shared.curCartItems = curCartScreenshot
+        CPMainParameters.shared.curCartItems = curCartScreenshot
         let jsonEncoder = JSONEncoder()
-        let jsonData = try! jsonEncoder.encode(cpMainParameters.shared.curCartItems)
+        let jsonData = try! jsonEncoder.encode(CPMainParameters.shared.curCartItems)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
         printMsg(message: "curCartScreenshot json:\(json ?? "")")
 
-        postCartToCP(cartJson:json!, isContained:cpMainParameters.shared.isCartSelfContained)
+        postCartToCP(cartJson:json!, isContained:CPMainParameters.shared.isCartSelfContained)
     }
     public func postCart(){
         let jsonEncoder = JSONEncoder()
-        let jsonData = try! jsonEncoder.encode(cpMainParameters.shared.curCartItems)
+        let jsonData = try! jsonEncoder.encode(CPMainParameters.shared.curCartItems)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
         printMsg(message: "postCart json:\(json ?? "")")
 
-        postCartToCP(cartJson:json!, isContained:cpMainParameters.shared.isCartSelfContained)
+        postCartToCP(cartJson:json!, isContained:CPMainParameters.shared.isCartSelfContained)
     }
     public func emptyCart(){
-        cpMainParameters.shared.curCartItems.removeAll()
+        CPMainParameters.shared.curCartItems.removeAll()
         let jsonEncoder = JSONEncoder()
-        let jsonData = try! jsonEncoder.encode(cpMainParameters.shared.curCartItems)
+        let jsonData = try! jsonEncoder.encode(CPMainParameters.shared.curCartItems)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
         printMsg(message: "emptyCart json:\(json ?? "")")
 
-        postCartToCP(cartJson:json!, isContained:cpMainParameters.shared.isCartSelfContained)
+        postCartToCP(cartJson:json!, isContained:CPMainParameters.shared.isCartSelfContained)
     }
     private func postCartToCP(cartJson:String, isContained:String) {
         printMsg(message: "postCartToCP cartJson:\(cartJson) \n isContained:\(isContained)")
 
-        let parameters = "action=cartscreenshot&isselfcontained=\(isContained)&cartItems=\(cartJson)&cptoken=\(cpMainParameters.shared.cptoken)&cuem=\(cpMainParameters.shared.cuem)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&bundle_id=\(cpMainParameters.shared.bundleID)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&utmsr=\(cpMainParameters.shared.utmsr)&language_code=\(cpMainParameters.shared.langStr)&ci=\(cpMainParameters.shared.ci)"
+        let parameters = "action=cartscreenshot&isselfcontained=\(isContained)&cartItems=\(cartJson)&cptoken=\(CPMainParameters.shared.cptoken)&cuem=\(CPMainParameters.shared.cuem)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&bundle_id=\(CPMainParameters.shared.bundleID)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&utmsr=\(CPMainParameters.shared.utmsr)&language_code=\(CPMainParameters.shared.langStr)&ci=\(CPMainParameters.shared.ci)"
         printMsg(message: "postCartToCP parameters:\(parameters)")
 
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         printMsg(message: "postCartToCP url:\(url)")
 
-        printMsg(message: "postCartToCP postCartScreenshot:\(cpMainParameters.shared.postCartScreenshot)")
-        if cpMainParameters.shared.postCartScreenshot != "no" {
+        printMsg(message: "postCartToCP postCartScreenshot:\(CPMainParameters.shared.postCartScreenshot)")
+        if CPMainParameters.shared.postCartScreenshot != "no" {
             doPostRequest(url: url, parameters: parameters)
         }
     }
@@ -523,7 +523,7 @@ public class cpConnectionService{
         //Print full message.
         printMsg(message: "didRecieveNotificationExtensionRequest full Message:\(userInfo)")
 
-        let showalert = cpMainParameters.shared.handleInAppNots
+        let showalert = CPMainParameters.shared.handleInAppNots
         printMsg(message: "didRecieveNotificationExtensionRequest showalert:\(showalert)")
 
         if showalert == "yes" {
@@ -589,9 +589,9 @@ public class cpConnectionService{
         return userInfo
     }
     public func postReceivedNotification(cp_cpn:String, cp_uinc:String, cp_d:String, pstate:String){
-        let cp_ver = cpMainParameters.shared.cp_ver
-        let cp_token = cpMainParameters.shared.cptoken
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let cp_ver = CPMainParameters.shared.cp_ver
+        let cp_token = CPMainParameters.shared.cptoken
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         printMsg(message: "postReceivedNotification url:\(url)")
         
         let parameters = "action=cp_NotReceived&cptoken=\(cp_token)&d_type=click&p_state=\(pstate)&cpn=\(cp_cpn)&uinc=\(cp_uinc)&cp_d=\(cp_d)&swver=\(cp_ver)"
@@ -603,7 +603,7 @@ public class cpConnectionService{
         printMsg(message: "postFCMTokenToCP fcmToken:\(fcmToken)")
         print("postFCMTokenToCP fcmToken:\(fcmToken)")
         if (fcmToken != "") {
-            let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+            let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
             printMsg(message: "postFCMTokenToCP url:\(url)")
 
             var oldfcmtoken = ""
@@ -615,7 +615,7 @@ public class cpConnectionService{
             var isFcmUpdate = "no"
             if (oldfcmtoken != "" && fcmToken != oldfcmtoken) {
                 isFcmUpdate = "yes"
-                cpMainParameters.shared.curSessionFCMTokenPosted = "no"
+                CPMainParameters.shared.curSessionFCMTokenPosted = "no"
             }
             printMsg(message: "postFCMTokenToCP isFcmUpdate:\(isFcmUpdate)")
 
@@ -624,37 +624,37 @@ public class cpConnectionService{
             }
             printMsg(message: "postFCMTokenToCP oldfcmtoken:\(oldfcmtoken)")
 
-            let parameters = "cptoken=\(cpMainParameters.shared.cptoken)&fcmToken=\(fcmToken)&oldfcmToken=\(oldfcmtoken)&isupdate=\(isFcmUpdate)&cuem=\(cpMainParameters.shared.cuem)&ci=\(cpMainParameters.shared.ci)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&app_version=\(cpMainParameters.shared.bundleVersion)&utmsr=\(cpMainParameters.shared.utmsr)&reg_page=\(cpMainParameters.shared.model)_\(cpMainParameters.shared.systemVersion)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&language_code=\(cpMainParameters.shared.langStr)&group=\(cpMainParameters.shared.group)"
+            let parameters = "cptoken=\(CPMainParameters.shared.cptoken)&fcmToken=\(fcmToken)&oldfcmToken=\(oldfcmtoken)&isupdate=\(isFcmUpdate)&cuem=\(CPMainParameters.shared.cuem)&ci=\(CPMainParameters.shared.ci)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&app_version=\(CPMainParameters.shared.bundleVersion)&utmsr=\(CPMainParameters.shared.utmsr)&reg_page=\(CPMainParameters.shared.model)_\(CPMainParameters.shared.systemVersion)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&language_code=\(CPMainParameters.shared.langStr)&group=\(CPMainParameters.shared.group)"
             printMsg(message: "postFCMTokenToCP parameters:\(parameters)")
 
-            printMsg(message: "postFCMTokenToCP isPushActive:\(cpMainParameters.shared.isPushActive)")
-            if (cpMainParameters.shared.isPushActive != false) {
-                printMsg(message: "postFCMTokenToCP notsAllowed:\(cpMainParameters.shared.notsAllowed)")
+            printMsg(message: "postFCMTokenToCP isPushActive:\(CPMainParameters.shared.isPushActive)")
+            if (CPMainParameters.shared.isPushActive != false) {
+                printMsg(message: "postFCMTokenToCP notsAllowed:\(CPMainParameters.shared.notsAllowed)")
                 
-                if (cpMainParameters.shared.notsAllowed != "no"){
-                    printMsg(message: "postFCMTokenToCP curSessionFCMTokenPosted:\(cpMainParameters.shared.curSessionFCMTokenPosted), fcmToken:\(fcmToken), oldfcmtoken:\(oldfcmtoken)")
+                if (CPMainParameters.shared.notsAllowed != "no"){
+                    printMsg(message: "postFCMTokenToCP curSessionFCMTokenPosted:\(CPMainParameters.shared.curSessionFCMTokenPosted), fcmToken:\(fcmToken), oldfcmtoken:\(oldfcmtoken)")
                     
-                    if (cpMainParameters.shared.curSessionFCMTokenPosted == "no" || (fcmToken != oldfcmtoken && oldfcmtoken != "")){
+                    if (CPMainParameters.shared.curSessionFCMTokenPosted == "no" || (fcmToken != oldfcmtoken && oldfcmtoken != "")){
                         doPostRequest(url: url, parameters: parameters)
                         UserDefaults.standard.set(fcmToken,forKey: "oldfcmtoken")
                         UserDefaults.standard.set("yes",forKey: "fcmtokenposted")
                         UserDefaults.standard.set("no",forKey: "postedDeniedFCM")
                         UserDefaults.standard.synchronize()
-                        cpMainParameters.shared.curSessionFCMTokenPosted = "yes"
-                        printMsg(message: "postFCMTokenToCP curSessionFCMTokenPosted:\(cpMainParameters.shared.curSessionFCMTokenPosted)")
+                        CPMainParameters.shared.curSessionFCMTokenPosted = "yes"
+                        printMsg(message: "postFCMTokenToCP curSessionFCMTokenPosted:\(CPMainParameters.shared.curSessionFCMTokenPosted)")
                     }
                 }
             }
         }
     }
     public func postDeniedFCMToCP(){
-        let url = URL(string: cpMainParameters.shared.cpSubmitDataEndpoint)!
+        let url = URL(string: CPMainParameters.shared.cpSubmitDataEndpoint)!
         printMsg(message: "postDeniedFCMToCP url:\(url)")
 
-        let putmp = "/"+cpMainParameters.shared.bundleID+"/ios/"
+        let putmp = "/"+CPMainParameters.shared.bundleID+"/ios/"
         printMsg(message: "postDeniedFCMToCP putmp:\(putmp)")
 
-        let parameters = "cptoken=\(cpMainParameters.shared.cptoken)&fcmToken=&oldfcmToken=&isupdate=denied&cuem=\(cpMainParameters.shared.cuem)&ci=\(cpMainParameters.shared.ci)&device_type=ios&device_id=\(cpMainParameters.shared.model)&device_osver=\(cpMainParameters.shared.systemVersion)&app_version=\(cpMainParameters.shared.bundleVersion)&utmsr=\(cpMainParameters.shared.utmsr)&reg_page=\(putmp)&cp_ver=\(cpMainParameters.shared.cp_ver)&cp_verClient=\(cpMainParameters.shared.cp_verClient)&language_code=\(cpMainParameters.shared.langStr)&group=\(cpMainParameters.shared.group)"
+        let parameters = "cptoken=\(CPMainParameters.shared.cptoken)&fcmToken=&oldfcmToken=&isupdate=denied&cuem=\(CPMainParameters.shared.cuem)&ci=\(CPMainParameters.shared.ci)&device_type=ios&device_id=\(CPMainParameters.shared.model)&device_osver=\(CPMainParameters.shared.systemVersion)&app_version=\(CPMainParameters.shared.bundleVersion)&utmsr=\(CPMainParameters.shared.utmsr)&reg_page=\(putmp)&cp_ver=\(CPMainParameters.shared.cp_ver)&cp_verClient=\(CPMainParameters.shared.cp_verClient)&language_code=\(CPMainParameters.shared.langStr)&group=\(CPMainParameters.shared.group)"
         printMsg(message: "postDeniedFCMToCP parameters:\(parameters)")
 
         if (UserDefaults.standard.object(forKey: "postedDeniedFCM") == nil) {

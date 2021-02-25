@@ -12,7 +12,7 @@ import CPSDKiOS
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-    var cpConnector = cpConnectionService(UIApplication.shared)
+    var cpConnector = CPConnectionService(UIApplication.shared)
     var firebaseOperator: FirebaseOperator?
     public var CPToken = "f5f49293fb634246b546ffc80d09cdc0"
     public var CPGroupName = "Cp test"
